@@ -35,7 +35,7 @@ class UserProfileManager(BaseUserManager):
 
         return user
 
-class Userprofile(AbstractBaseUser,PermissionsMixin):
+class UserProfile(AbstractBaseUser,PermissionsMixin):
 
     """ Database model for users in system """
 
