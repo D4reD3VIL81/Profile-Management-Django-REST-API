@@ -7,6 +7,9 @@ from yaml import serialize_all
 from . import serializers
 from rest_framework import viewsets
 from . import models
+from rest_framework.authentication import TokenAuthentication
+from . import permissions
+from rest_framework import filters
 
 # Create your views here.
 
@@ -107,4 +110,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 
     serializer_class = serializers.UserProfileSerializer
     queryset = models.UserProfile.objects.all()
-    
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.UpdateOwnProfile,)
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name', 'email',)
