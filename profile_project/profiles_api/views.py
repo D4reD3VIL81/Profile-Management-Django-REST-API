@@ -12,6 +12,7 @@ from . import permissions
 from rest_framework import filters
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 # Create your views here.
 
@@ -121,3 +122,19 @@ class UserLoginApiView(ObtainAuthToken):
     """ Handle creating user authentication tokens """
 
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
+
+class ProfileFeedViewSet(viewsets.ModelViewSet):
+    """ Handle profile Feed """
+
+    serializer_class = serializers.UserProfileFeedSerializer
+    authentication_classes = (TokenAuthentication,)
+    queryset = models.UserProfileFeed.objects.all()
+    permission_classes = (
+        permissions.UpdateProfileFeed,
+        IsAuthenticatedOrReadOnly
+    )
+
+    def perform_create(self, serializer):
+        """ Sets the user profile to the logged in user """
+
+        serializer.save(profile_name=self.request.user)
